@@ -1,0 +1,117 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>ReactJS Form and Event</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="bower_components/react/react.js"></script>
+    <script src="bower_components/react/JSXTransformer.js"></script>
+	<script type="text/jsx">
+		var FormApp = React.createClass({
+			getInitialState:function(){
+				return {
+					userName: 'Chan Dai Man',
+					passWord: 'abc123',
+					selectedUniversity: 'HKUST',
+					radioValue: '15-25',
+					textArea: 'Please enter some comment here...'
+				}
+			},
+			
+			// the function below was used to handle the elements change
+			
+			handleUserName: function(e){
+				this.setState({
+					userName: e.target.value,
+				})
+			},
+			handlePassWord: function(e){
+				this.setState({
+					passWord: e.target.value,
+				})
+			},
+			handleSelectedUniversity: function(e){
+				this.setState({
+					selectedUniversity: e.target.value,
+				})
+			},
+			handleRadioValue: function(e){
+				this.setState({
+					radioValue: e.target.value,
+				})
+			},
+			handleTextArea: function(e){
+				this.setState({
+					textArea: e.target.value,
+				})
+			},
+			
+			// the function above was used to handle the elements change
+			
+			// the function will show the state of all the element once you clicked the submit button
+			handleSubmit:function(e){
+				e.preventDefault();
+				console.log('from submitting...');
+				console.log(e);
+				console.log(this.state.userName);
+				console.log(this.state.passWord);
+				console.log(this.state.selectedUniversity);
+				console.log(this.state.radioValue);				
+				console.log(this.state.textArea);
+			},
+			// end of implementation of handler functions
+			
+			
+			// return html form elements here
+			render: function(){
+				return(
+					<form onSubmit={this.handleSubmit}>
+						<div>
+							<small> user name:	</small>
+							<input type="text" value={this.state.userName} onChange={this.handleUserName}/>
+						</div>
+						<br/>
+						
+						<div>
+							<small> password:	</small>
+							<input type="password" value={this.state.passWord} onChange={this.handlePassWord}/>
+						</div>
+						<br/>
+						<select value={this.state.selectedUniversity} onChange={this.handleSelectedUniversity}>
+							<option value="HKUST">HKUST</option>
+							<option value="HKU">HKU</option>
+							<option value="CUHK">CUHK</option>
+						</select>
+						<br/>
+						<p>Please indicate you age range</p>
+						<input name="ageRadio" value="5-15" type="radio" onChange={this.handleRadioValue}>5-15</input>
+						<input name="ageRadio" value="15-25" type="radio" onChange={this.handleRadioValue}>15-25</input>
+						<input name="ageRadio" value="25-35" type="radio" onChange={this.handleRadioValue}>25-35</input>
+						<br/>
+						<p>Plase comment here</p>
+						<textarea value={this.state.textArea} onChange={this.handleTextArea}></textarea>
+						<br/>
+						<button type="submit">Submit</button>
+					</form>
+					
+				)
+			}
+		});
+		
+		
+		
+		var formApp = React.render(
+			<FormApp />,
+			document.getElementById('app')
+		)
+
+
+	</script>
+
+
+</body>
+
+</html>

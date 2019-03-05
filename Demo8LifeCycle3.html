@@ -1,0 +1,92 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>ReactJS Lifecycle 3 Update Cycle</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="bower_components/react/react.js"></script>
+    <script src="bower_components/react/JSXTransformer.js"></script>
+	<script type="text/jsx">	
+		var MessageBox = React.createClass({
+			getInitialState:function(){
+				console.log('getInitialState');
+				return{
+					count:0,
+				}
+			},
+			getDefaultProps:function(){
+				console.log('getInitialState')	;
+				return{
+				}
+			},
+			
+			// the function check whether we need to update attribute of components, we usually put boolean check here
+			shouldComponentUpdate:function(nextProp,nextState){
+				console.log('shouldComponentUpdate');
+				if(nextState.count>30) return false;
+				return true;	
+			},
+			// the function is the process of update
+			componentWillUpdate:function(nextProp,nextState){
+				console.log('componentWillUpdate');
+			},
+			// the function really make the update
+			doUpdate:function(){
+				this.setState({
+					count: this.state.count+1,
+				});	
+			},
+			// the function means pages have updated
+			componentDidUpdate:function(){
+				console.log('componentDidUpdate');
+			},
+			render:function(){
+				console.log('Mounting');
+				return(
+					<div>
+						<h1>Component Count: {this.state.count}</h1>
+						<button onClick={this.doUpdate}>Update Component and Subcomponent</button>
+						<Submessage count={this.state.count}/>
+					</div>
+				)
+			}
+			
+			
+		});
+		
+		var Submessage = React.createClass({
+			// this function note that there is value pass
+			componentWillReceiveProps:function(nextProp){
+				console.log('Subcomponent receive prop'); 
+			},
+			
+			shouldComponentUpdate:function(nextProp,nextState){
+				if(nextProp.count>5) return false;
+				return true;	
+			},
+			
+			render:function(){
+				return(
+					<div>
+						<h3>Subcomponent Count: {this.props.count}</h3>
+					</div>
+				)
+				
+			}
+		});
+		
+		var messageBox = React.render( <MessageBox/>,		
+			document.getElementById('app')
+		)
+		
+		
+		
+	</script>
+
+
+</body>
+
+</html>

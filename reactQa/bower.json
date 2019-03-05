@@ -1,0 +1,20 @@
+{
+  "name": "reactQa",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "LINXufeng"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^4.3.1"
+  }
+}

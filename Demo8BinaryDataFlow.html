@@ -1,0 +1,90 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>React DataBinding</title>
+</head>
+
+<body>
+	<!--在這個例子中，你會用到雙向數據流，它是通過onchange來實現，不過react幫你建立了一個庫-->
+	<!--你需要了解LinkedStateMixIn-->
+    <div id="app"></div>
+    <!--你需要包含文件react-with-addon.js-->
+    <script src="bower_components/react/react-with-addons.js"></script>
+    <script src="bower_components/react/JSXTransformer.js"></script>
+	<script type="text/jsx">
+		var EasyForm = React.createClass({
+			// if you want to use linkedStateMixIn, you should use an array to store interface（插件）
+			// note: linkedStateMixIn will return an object, it could be passed to its children component
+			mixins:[React.addons.LinkedStateMixin],// forget this "," sign lead to unedefined identificator for getInitialState
+			getInitialState:function(){
+				return{
+					message:'Felix is handsome!',
+					isFelixHandsome:true,
+				}
+			},
+			render:function(){
+				return(
+					<div>
+						<h1>Those girls say: {this.state.message}</h1>
+						<h2>Felix is handsome? {this.state.isFelixHandsome?'Very Handsome!':'Very Cute!'}</h2>
+						{/* linkState method is provided by LinkedStateMixIn, we use it to bind message*/}
+						
+						
+						<input type="text" valueLink={this.linkState('message')}></input>
+						{/* for check box, it could not use value link, we have to use checkedLink*/}
+						<br/>
+						<input type="checkbox" checkedLink={this.linkState('isFelixHandsome')}></input>
+						<br/>
+						{/* here, we define messageLink and likeLink and pass it to its children node */}
+						<SubComp messageLink ={this.linkState('message')} likeLink={this.linkState('isFelixHandsome')}/>
+					</div>
+				)
+			}
+		});
+		
+		// note: linkedStateMixIn will return an object, it could be passed to its children component
+		// let us define more sub component to have a try
+		
+		var SubComp = React.createClass({
+			render:function(){
+				return(
+					<div>
+						<h3>This is a child component</h3>
+						<SubSubComp messageLink={this.props.messageLink} likeLink={this.props.likeLink}/>
+						{/* this statement is same as <SubSubComp {...this.props}/> */}
+					</div>
+					
+				)
+			}	
+		});
+		// one more question: if we have a lot of props need to pass, the signature will become so long like 
+		// SubComp messageLink ={this.linkState('message')} likeLink={this.linkState('isFelixHandsome')}...
+		// SubSubComp messageLink ={this.linkState('message')} likeLink={this.linkState('isFelixHandsome')}...
+		// one solution: spread operator ... to extend array. for example array = [1,2,3]  
+		// you can pass parameter (1,2,3) or (...array)
+		
+		var SubSubComp = React.createClass({
+			render:function(){
+				return(
+					<div>
+						<p>What do you want to say?</p>
+						<input type="text" valueLink={this.props.messageLink}></input>
+						<p>Do you love Felix?</p>
+						<input type="checkbox" checkedLink={this.props.likeLink}></input>						
+					</div>
+				)
+			}
+		})
+		
+		var formApp = React.render(
+			<EasyForm />, // forget this "," sign lead to unexpected component for documents
+			document.getElementById('app')	
+		)
+		
+		
+		
+		
+	</script>
+</body>
+</html>

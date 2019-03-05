@@ -1,0 +1,103 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>ReactJS Lifecycle 1</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="bower_components/react/react.js"></script>
+    <script src="bower_components/react/JSXTransformer.js"></script>
+	<script type="text/jsx">	
+		
+		{/* 組件生命週期
+				週期一般有三大階段
+				裝載階段
+					It provide two functions
+					Mounting:componentWillMount
+						防止二次渲染
+					Mounting:componentDidMount
+						在渲染之後這個函數才執行
+						因此我們可以通過這個函數得到DOM this.getDOMNode()
+						在這也容許ajax操作
+				更新階段
+				卸載
+					提供componentWillUnmount function
+					有時你可以把組件卸載掉，但是有一下組件如timer.interval.時間監聽函數不能被清楚，你必須在這個函數內清除這些元素保證內存不洩露
+
+		*/}
+		var MessageBox = React.createClass({
+			getInitialState:function(){
+				console.log('getInitialState');	
+				return {
+					titleMessage:'Hello World',
+				}
+			},
+			getDefaultProps:function(){
+				console.log('getDefaultProps');
+				return{	
+				}
+			},
+			// new function we learn: Mounting:componentWillMount 防止二次渲染
+			componentWillMount:function(){
+				console.log('componentWillMount');
+				this.setState({
+					titleMessage:'change property titleMessage inside function componentWillMount',
+				})
+			},
+			// new function we learn: Mounting:componentDidMount 在渲染之後這個函數才執行
+			// 因此我們可以通過這個函數得到DOM this.getDOMNode()
+			// 在這也容許ajax操作
+			componentDidMount:function(){
+				console.log('componentDidMount');
+				console.log(this.getDOMNode());
+			},
+			// 卸載
+			// 提供componentWillUnmount function
+			// 有時你可以把組件卸載掉，但是有一下組件如timer.interval.時間監聽函數不能被清楚，你必須在這個函數內清除這些元素保證內存不洩露
+			componentWillUnmount:function(){
+				console.log('you have removed some component');
+				clearInterval(this.timer);
+			},
+			// the function remove whole component 
+			killMySelf:function(){
+				React.unmountComponentAtNode(document.getElementById('app'));	
+			},
+			
+			
+			
+			render:function(){
+				console.log('Mounting');
+				return(
+					<div>
+						<h1>{this.state.titleMessage}</h1>
+						<button onClick={this.killMySelf}>Remove Felix is handsome!</button>
+						<Submessage/>						
+					</div>
+				)	
+			}
+		});
+		
+		var Submessage = React.createClass({
+			render:function(){
+				return(
+					<div>
+						<h3>Felix is handsome!</h3>
+					</div>
+				)
+			}
+		});
+		
+		var messageBox = React.render( <MessageBox/>,		
+			document.getElementById('app')
+		)
+		
+		
+		
+	</script>
+
+
+</body>
+
+</html>
